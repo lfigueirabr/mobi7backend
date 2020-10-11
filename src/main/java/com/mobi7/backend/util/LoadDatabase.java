@@ -67,7 +67,8 @@ public class LoadDatabase {
                 log.info("Preloading " + poiRepository.save(new POI(record[0], Integer.parseInt(record[1]), Double.parseDouble(record[2]), Double.parseDouble(record[3]))));
             }
             for (String[] record : posicoes) {
-                log.info("Preloading " + posicaoRepository.save(new Posicao(record[0], dateFormat.parse(record[1]), Integer.parseInt(record[2]), Double.parseDouble(record[3]), Double.parseDouble(record[4]), Boolean.parseBoolean(record[5]))));
+                // swapping latitude and longitude as they are swapped on the csv file
+                log.info("Preloading " + posicaoRepository.save(new Posicao(record[0], dateFormat.parse(record[1]), Integer.parseInt(record[2]), Double.parseDouble(record[4]), Double.parseDouble(record[3]), Boolean.parseBoolean(record[5]))));
             }
         };
     }

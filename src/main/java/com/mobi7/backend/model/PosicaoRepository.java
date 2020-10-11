@@ -13,4 +13,7 @@ public interface PosicaoRepository extends JpaRepository<Posicao, Long> {
 
     @Query("from Posicao p where p.placa = :placa and p.data between :begin and :end")
     public List<Posicao> findByPlacaAndDataBetween(String placa, Date begin, Date end);
+
+    @Query("select distinct p.placa from Posicao p order by p.placa asc")
+    public List<String> findPlacas();
 }
