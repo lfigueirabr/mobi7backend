@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.data.domain.Example;
 
 import java.util.List;
+import java.util.Calendar;
 import java.util.Date;
 
 @RestController
@@ -29,29 +30,31 @@ public class PosicaoController {
     @GetMapping("/posicao")
     public List<Posicao> posicaoByPlacaData(@RequestParam(required=false) String placa, @RequestParam(required=false) Date data) {
         if (data != null) {
-            List<Posicao> posicao;
-
-            Date end = (Date) data.clone();
-            end.setHours(23);
-            end.setMinutes(59);
-            end.setSeconds(59);
+            List<Posicao> posicoes;
+            
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(data);
+            cal.set(Calendar.HOUR_OF_DAY, 23);
+            cal.set(Calendar.MINUTE, 59);
+            cal.set(Calendar.SECOND, 59);
+            Date end = cal.getTime();
 
             if (placa != null) {
-                posicao = repository.findByPlacaAndDataBetween(placa, data, end);
+                posicoes = repository.findByPlacaAndDataBetween(placa, data, end);
             } else {
-                posicao = repository.findByDataBetween(data, end);
+                posicoes = repository.findByDataBetween(data, end);
             }
-            return posicao;
+            return posicoes;
         } else {
             if (placa != null) {
                 Example<Posicao> example = Example.of(new Posicao(placa, null, null, null, null, null));
 
-                List<Posicao> posicao = repository.findAll(example);
+                List<Posicao> posicoes = repository.findAll(example);
             
-                return posicao;
+                return posicoes;
             }
         }
 
-        return null;
+        return repository.findAll();
     }
 }
